@@ -1,14 +1,23 @@
 import "./styles.css";
 import { createProject } from "./project.js";
+import { loadProjects, removeTodos, saveProjects } from "./storage.js";
 
 export const AppController = function(){
     let projects = [createProject("Default")];
     let currentProject = projects[0];
+    saveProjects(projects);
+
+    const init = () => {
+        projects = loadProjects() !== null ? loadProjects() : [createProject("Default")];
+        currentProject = projects[0];
+        saveProjects(projects);
+    }
 
     const addProject = (name) => {
         const newProject = createProject(name);
         projects.unshift(newProject);
         currentProject = projects[0];
+        saveProjects(projects);
         return newProject;
     }
 
@@ -25,6 +34,8 @@ export const AppController = function(){
         if (projects.length > 1) {
             projects = projects.filter(project => project.id !== id);
             currentProject = projects[0];
+            removeTodos(id);
+            saveProjects(projects);
         }
     }
 
@@ -40,6 +51,7 @@ export const AppController = function(){
         }
     }
 
+
     const getCurrentProject = function() {
         return currentProject;
     }
@@ -49,6 +61,7 @@ export const AppController = function(){
     }
 
     return {
+        init,
         addProject,
         addTodoToCurrent,
         deleteProject,
