@@ -6,6 +6,63 @@
     <title>Todo List</title>
 </head>
 <body>
-    
+    <section id="sidebar-section"></section>
+    <section id="todo-section"></section>
+    <dialog id="project-dialog">
+        <form id="project-form">
+            <p>
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" required>
+            </p>
+            <div id="project-dialog-btns">
+                <button id="project-cancel-btn">Cancel</button>
+                <button id="project-confirm-btn">Confirm</button>
+            </div>
+        </form>
+    </dialog>
+    <dialog id="todo-dialog">
+        <form id="todo-form">
+            <p>
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title" required>
+            </p>
+            <p>
+                <label for="description">Description</label>
+                <br>
+                <textarea 
+                    name="description" 
+                    id="description"
+                    rows="12"
+                    cols="30"
+                    placeholder="Enter the description here..."
+                    required></textarea>
+            </p>
+            <p>
+                <label for="dueDate">Due Date</label>
+                <input type="datetime-local" name="dueDate" id="due-date" required>
+            </p>
+            <fieldset>
+                <legend>How important is the task?</legend>
+                <div>
+                    <p>
+                        <label for="priorityChoice1">Highly important</label>
+                        <input type="radio" name="priority" id="priorityChoice1" value="high" required>
+                    </p>
+                    <p>
+                        <label for="priorityChoice2">Moderately important</label>
+                        <input type="radio" name="priority" id="priorityChoice2" value="medium">
+                    </p>
+                    <p>
+                        <label for="priorityChoice1">Not important</label>
+                        <input type="radio" name="priority" id="priorityChoice3" value="low">
+                    </p>
+                </div>
+            </fieldset>
+            <div id="todo-dialog-btns">
+                <button id="todo-cancel-btn" value="Cancel">Cancel</button>
+                <button id="todo-confirm-btn">Confirm</button>
+            </div>
+        </form>
+    </dialog>
 </body>
 </html>

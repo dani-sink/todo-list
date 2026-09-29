@@ -1,3 +1,5 @@
 node_modules
 dist
 src/manual-tests.js
+src/manual-tests-two.js
+src/manual-tests-three.js

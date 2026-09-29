@@ -71,6 +71,8 @@ export const AppController = function(){
     }
 }
 
-const controller = AppController();
 
-export default controller;
+// for test purposes
+// const controller = AppController();
+
+// export default controller;
