@@ -12,7 +12,7 @@
         <form id="project-form">
             <p>
                 <label for="name">Name</label>
-                <input type="text" name="name" id="name" required>
+                <input type="text" name="name" id="project-name" required>
             </p>
             <div id="project-dialog-btns">
                 <button id="project-cancel-btn">Cancel</button>
@@ -39,7 +39,7 @@
             </p>
             <p>
                 <label for="dueDate">Due Date</label>
-                <input type="datetime-local" name="dueDate" id="due-date" required>
+                <input type="date" name="dueDate" id="due-date" required>
             </p>
             <fieldset>
                 <legend>How important is the task?</legend>
@@ -61,6 +61,17 @@
             <div id="todo-dialog-btns">
                 <button id="todo-cancel-btn" value="Cancel">Cancel</button>
                 <button id="todo-confirm-btn">Confirm</button>
+            </div>
+        </form>
+    </dialog>
+    <dialog id="delete-todo-dialog">
+        <form id="delete-todo-form">
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete this task? This action cannot be undone.</p>
+
+            <div id="delete-dialog-btns">
+                <button id="delete-cancel-btn" value="Cancel">Cancel</button>
+                <button id="delete-confirm-btn" value="confirm">Delete</button>
             </div>
         </form>
     </dialog>

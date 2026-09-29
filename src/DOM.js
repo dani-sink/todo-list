@@ -1,14 +1,24 @@
-export const ScreenController = function() {
+import { format } from "date-fns";
+import { CHECKED_SVG_STRING, CHEVRON_DOWN_STRING, CHEVRON_UP_STRING, NOTEBOOK_SVG_STRING, TRASHCAN_STRING, UNCHECKED_SVG_STRING } from "./svg-strings.js";
+
+export const ScreenController = function(appController) {
     const sidebarSection = document.querySelector("#sidebar-section");
     const todoSection = document.querySelector("#todo-section");
     const projectDialog = document.querySelector("#project-dialog");
     const todoDialog = document.querySelector("#todo-dialog");
     const projectForm = document.querySelector("#project-form");
     const todoForm = document.querySelector("#todo-form");
-
     const projectCancelBtn = document.querySelector("#project-cancel-btn");
-
     const todoCancelBtn = document.querySelector("#todo-cancel-btn");
+    const projectConfirmBtn = document.querySelector("#project-confirm-btn");
+    const todoConfirmBtn = document.querySelector("#todo-confirm-btn");
+    const deleteTodoDialog = document.querySelector("#delete-todo-dialog");
+    const deleteTodoForm = document.querySelector("#delete-todo-form");
+    const deleteTodoCancelBtn = document.querySelector("#delete-cancel-btn");
+    const deleteTodoConfirmBtn = document.querySelector("#delete-confirm-btn");
+
+    let targetDeleteTodoId = "";
+
 
     projectCancelBtn.addEventListener("click", function(e) {
         e.preventDefault();
@@ -17,12 +27,86 @@ export const ScreenController = function() {
         projectForm.reset();
     });
 
-  todoCancelBtn.addEventListener("click", function(e) {
+    todoCancelBtn.addEventListener("click", function(e) {
         e.preventDefault();
 
         todoDialog.close();
         todoForm.reset();
     });
+
+    deleteTodoCancelBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        
+        targetDeleteTodoId = "";
+        deleteTodoDialog.close();
+        deleteTodoForm.reset();
+    });
+
+    projectConfirmBtn.addEventListener("click", function(e){
+        e.preventDefault(); // We don't want to submit this fake form
+
+        if (projectForm.checkValidity()) {
+            const projectName = projectForm.querySelector("#project-name").value;
+            appController.addProject(projectName);
+            updateRender();
+
+            projectDialog.close(); 
+            projectForm.reset();
+            
+        } else {
+            projectForm.reportValidity();
+        }
+    });
+
+    todoConfirmBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        if (todoForm.checkValidity()) {
+            const todoTitle = todoForm.querySelector("#title").value;
+            const todoDescription = todoForm.querySelector("#description").value;
+            const todoDueDate = todoForm.querySelector("#due-date").value;
+            const todoPriority = todoForm.querySelector('input[name="priority"]:checked').value;
+            appController.addTodoToCurrent(todoTitle, todoDescription, todoDueDate, todoPriority);
+            updateRender();
+
+            todoDialog.close();
+            todoForm.reset();
+            
+        } else {
+            todoForm.reportValidity();
+        }
+    });
+
+    deleteTodoConfirmBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        appController.getCurrentProject().removeTodo(targetDeleteTodoId);
+        updateRender();
+        targetDeleteTodoId = "";
+        deleteTodoDialog.close();
+        deleteTodoForm.reset();
+    });
+    
+    const capitalizeFirstLetter = (str) => {
+        if (!str) return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    const formatDate = (dateString) => {
+        const arr = dateString.split("-").map(num => Number(num))
+        const date = new Date(arr[0], arr[1] - 1, arr[2]);
+        const wordsFormat = format(date, "dd MMM");
+        return wordsFormat;
+    }
+
+    const isOverdue = (dateString) => {
+        const todayDateString = new Date().toISOString().split('T')[0];
+
+        const todayDate = new Date(todayDateString);
+        const targetDate = new Date(dateString);
+
+        return targetDate < todayDate;
+    }
 
     const clearSidebar = () => {
         sidebarSection.replaceChildren();
@@ -30,6 +114,12 @@ export const ScreenController = function() {
 
     const clearTodoSection = () => {
         todoSection.replaceChildren();
+    }
+
+    const updateRender = () => {
+        const allProjects = appController.getProjects();
+        const currentProject = appController.getCurrentProject();
+        render(allProjects, currentProject);
     }
 
     const renderSidebar = (projects) => {
@@ -82,27 +172,66 @@ export const ScreenController = function() {
         sidebarSection.appendChild(sideBarButton);        
     } 
 
-    const renderNotesSVG = function () {
-        const svgNS = "http://www.w3.org/2000/svg";
-        const notesSVG = document.createElementNS(svgNS, "svg");
+    const renderSVG = function (svgString) {
+        // Initialize the DOMParser
+        const parser = new DOMParser();
 
-        notesSVG.setAttribute("fill", "#000000");
-        notesSVG.setAttribute("version", "1.1");
-        notesSVG.setAttribute("id", "Capa_1");
+        // Parse the string into an XML Document object
+        const doc = parser.parseFromString(svgString, "image/svg+xml");
+
+        // Extract the SVG element node
+        const svgElement = doc.documentElement;
+
+        return svgElement;
+    }
+
+    const renderNotesSVG = function () {
+        const notesSVG = renderSVG(NOTEBOOK_SVG_STRING);
         notesSVG.setAttribute("width", "40px");
         notesSVG.setAttribute("height", "40px");
-        notesSVG.setAttribute("viewBox", "0 0 439.619 439.619");
-        notesSVG.setAttribute("xml:space", "preserve");
-
-        const gElement = document.createElementNS(svgNS, "g");
-
-        const pathElement = document.createElementNS(svgNS, "path");
-        pathElement.setAttribute("d", "M377.174,0H80.144C60.86,0,45.179,15.687,45.179,34.971v27.668c-9.9,0.955-17.697,9.23-17.697,19.379c0,10.151,7.796,18.418,17.697,19.375v22.23c-9.9,0.964-17.697,9.23-17.697,19.382c0,10.148,7.796,18.418,17.697,19.375v23.688c-9.9,0.958-17.697,9.227-17.697,19.376c0,10.151,7.796,18.418,17.697,19.378v22.236c-9.9,0.958-17.697,9.227-17.697,19.376c0,10.154,7.796,18.418,17.697,19.387v21.93c-9.9,0.963-17.697,9.232-17.697,19.381s7.796,18.418,17.697,19.375v58.145c0,19.287,15.69,34.969,34.965,34.969h297.03c19.281,0,34.963-15.688,34.963-34.969V34.965C412.137,15.687,396.456,0,377.174,0z M45.173,336.512c-4.389-0.875-7.705-4.753-7.705-9.393s3.316-8.518,7.705-9.387V336.512z M45.173,275.819c-4.389-0.874-7.705-4.752-7.705-9.386c0-4.641,3.316-8.512,7.705-9.387V275.819z M45.173,214.829c-4.389-0.875-7.705-4.749-7.705-9.386c0-4.644,3.316-8.518,7.705-9.387V214.829z M45.173,152.385c-4.389-0.872-7.705-4.743-7.705-9.38		c0-4.643,3.316-8.518,7.705-9.39V152.385z M45.173,91.401c-4.389-0.878-7.705-4.747-7.705-9.389c0-4.643,3.316-8.515,7.705-9.387V91.401z M392.159,404.65c0,8.258-6.727,14.984-14.984,14.984H80.144c-8.26,0-14.984-6.727-14.984-14.984v-57.961h14.81c1.726,6.674,7.728,11.621,14.951,11.621c8.556,0,15.492-6.934,15.492-15.486c0-8.559-6.937-15.498-15.492-15.498c-6.381,0-11.851,3.859-14.224,9.368H65.16v-50.696h14.81c1.726,6.679,7.728,11.627,14.951,11.627c8.556,0,15.492-6.934,15.492-15.492c0-8.56-6.937-15.498-15.492-15.498c-6.381,0-11.851,3.854-14.224,9.362H65.16v-50.986h15.265c2.172,5.923,7.82,10.179,14.496,10.179c8.556,0,15.492-6.939,15.492-15.499s-6.937-15.495-15.492-15.495c-6.918,0-12.711,4.563-14.703,10.823H65.16v-52.452h14.877c1.797,6.567,7.746,11.423,14.883,11.423c8.556,0,15.492-6.937,15.492-15.495c0-8.559-6.937-15.495-15.492-15.495c-6.46,0-11.984,3.957-14.31,9.575H65.16v-51.001h14.446c0.89,7.708,7.368,13.716,15.315,13.716c8.556,0,15.492-6.937,15.492-15.495s-6.937-15.495-15.492-15.495c-5.533,0-10.353,2.917-13.092,7.282H65.16V34.965c0-8.26,6.724-14.987,14.984-14.987h297.03c8.258,0,14.984,6.727,14.984,14.987V404.65z M183.464,70.506h161.402v80.7H183.464V70.506z");
-
-        gElement.appendChild(pathElement);
-        notesSVG.appendChild(gElement)
         return notesSVG;
     }
+
+    const renderUncheckedSVG = function () {
+        const uncheckedSVG = renderSVG(UNCHECKED_SVG_STRING);
+        uncheckedSVG.setAttribute("width", "40px");
+        uncheckedSVG.setAttribute("height", "40px");
+        uncheckedSVG.style.pointerEvents = "none";
+        return uncheckedSVG;
+    }
+
+    const renderCheckedSVG = function () {
+        const checkedSVG = renderSVG(CHECKED_SVG_STRING);
+        checkedSVG.setAttribute("width", "40px");
+        checkedSVG.setAttribute("height", "40px");
+        checkedSVG.setAttribute("fill", "#4BB543");
+        checkedSVG.style.pointerEvents = "none";
+        return checkedSVG;
+    }
+
+    const renderChevronDownSVG = function () {
+        const chevronDownSVG = renderSVG(CHEVRON_DOWN_STRING);
+        chevronDownSVG.setAttribute("width", "40px");
+        chevronDownSVG.setAttribute("height", "40px");
+        chevronDownSVG.style.pointerEvents = "none";
+        return chevronDownSVG;
+    }
+    
+    const renderChevronUpSVG = function () {
+        const chevronUpSVG = renderSVG(CHEVRON_UP_STRING);
+        chevronUpSVG.setAttribute("width", "40px");
+        chevronUpSVG.setAttribute("height", "40px");
+        chevronUpSVG.style.pointerEvents = "none";
+        return chevronUpSVG;
+    }
+    const renderTrashcanSVG = function () {
+        const trashcanSVG = renderSVG(TRASHCAN_STRING);
+        trashcanSVG.setAttribute("width", "40px");
+        trashcanSVG.setAttribute("height", "40px");
+        trashcanSVG.style.pointerEvents = "none";
+        return trashcanSVG;
+    }
+    
 
     const renderTodoSection = function (project) {
         clearTodoSection();
@@ -140,6 +269,121 @@ export const ScreenController = function() {
 
             todoSection.appendChild(notesSVG);
             todoSection.appendChild(blankProjectText);
+        } else {
+            const todos = project.getTodos();
+            const todoList = document.createElement("ul");
+            todoList.classList.add("todo-items-container");
+            todos.forEach((todo) => {
+                const todoItem = document.createElement("li");
+                todoItem.classList.add("todo-item");
+                todoItem.dataset.expanded = "false";
+                todoItem.dataset.todoId = todo.id;
+                todoItem.dataset.completed = String(todo.completed);
+
+                // Left container
+                const todoItemLeftContainer = document.createElement("div");
+                todoItemLeftContainer.classList.add("todo-item-left-container");
+
+                const todoItemCompletedButton = document.createElement("button");
+                todoItemCompletedButton.classList.add("todo-item-completed-btn");
+
+                const completedSVG = todo.completed ? renderCheckedSVG() : renderUncheckedSVG();
+                todoItemCompletedButton.appendChild(completedSVG);
+                todoItemCompletedButton.addEventListener("click", function(e) {
+                    e.preventDefault();
+
+                    const todo_item = e.target.parentElement.parentElement;
+                    const todo_id = todo_item.dataset.todoId;
+                    appController.getCurrentProject().toggleTodo(todo_id);
+                    updateRender();
+
+                    if (todo_item.dataset.completed === "false") {
+                        todoItemCompletedButton.replaceChildren(renderCheckedSVG());
+                    } else if (todo_item.dataset.completed === "true") {
+                        todoItemCompletedButton.replaceChildren(renderUncheckedSVG());
+                    }
+                })
+
+
+                todoItemLeftContainer.appendChild(todoItemCompletedButton);
+                todoItem.appendChild(todoItemLeftContainer);
+
+
+                // Middle container
+                const todoItemMiddleContainer = document.createElement("div");
+                todoItemMiddleContainer.classList.add("todo-item-middle-container");
+
+                const todoTitle = document.createElement("p");
+                todoTitle.classList.add("todo-item-title");
+                todoTitle.textContent = todo.title;
+
+                const todoDescription = document.createElement("p");
+                todoDescription.classList.add("todo-item-description");
+                todoDescription.textContent = "";
+
+                todoItemMiddleContainer.appendChild(todoTitle);
+                todoItemMiddleContainer.appendChild(todoDescription);
+                todoItem.appendChild(todoItemMiddleContainer);
+
+
+                // Right container
+                const todoItemRightContainer = document.createElement("div");
+                todoItemRightContainer.classList.add("todo-item-right-container");
+
+                const todoItemPriority = document.createElement("span");
+                todoItemPriority.classList.add("todo-item-priority");
+                todoItemPriority.classList.add(todo.priority);
+                todoItemPriority.textContent = capitalizeFirstLetter(todo.priority);
+
+                const todoItemDate = document.createElement("span");
+                todoItemDate.classList.add("todo-item-date");
+                if (isOverdue(todo.dueDate)) {
+                    todoItemDate.classList.add("overdue");
+                    todoItemDate.textContent = `Overdue · ${formatDate(todo.dueDate)}`
+                } else {
+                    todoItemDate.textContent = formatDate(todo.dueDate);
+                }
+                
+                const todoItemChevronBtn = document.createElement("button");
+                todoItemChevronBtn.classList.add("chevron-btn");
+                const chevronDownSVG = renderChevronDownSVG();
+                todoItemChevronBtn.appendChild(chevronDownSVG);
+                todoItemChevronBtn.addEventListener("click", function(e) {
+                    e.preventDefault();
+
+                    if (e.target.parentElement.parentElement.dataset.expanded === "false") {
+                        e.target.parentElement.parentElement.dataset.expanded = "true";
+                        e.target.replaceChildren(renderChevronUpSVG());
+                        todoDescription.textContent = todo.description;
+                    } else if (e.target.parentElement.parentElement.dataset.expanded === "true") {
+                        e.target.parentElement.parentElement.dataset.expanded = "false";
+                        e.target.replaceChildren(renderChevronDownSVG());
+                        todoDescription.textContent = "";
+                    }                    
+                });
+
+                const todoItemDeleteBtn = document.createElement("button");
+                todoItemDeleteBtn.classList.add("todo-delete-btn");
+                const trashcanSVG = renderTrashcanSVG();
+                todoItemDeleteBtn.appendChild(trashcanSVG);
+                todoItemDeleteBtn.addEventListener("click", function(e) {
+                    e.preventDefault();
+
+                    targetDeleteTodoId = e.target.parentElement.parentElement.dataset.todoId;
+                    deleteTodoDialog.showModal();
+                });
+
+
+                todoItemRightContainer.appendChild(todoItemPriority);
+                todoItemRightContainer.appendChild(todoItemDate);
+                todoItemRightContainer.appendChild(todoItemChevronBtn);
+                todoItemRightContainer.appendChild(todoItemDeleteBtn);
+
+                todoItem.appendChild(todoItemRightContainer);
+                todoList.appendChild(todoItem);
+            });
+
+            todoSection.appendChild(todoList);
         }
     }
 

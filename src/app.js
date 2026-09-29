@@ -6,11 +6,20 @@ import "./styles.css";
 // import "./manual-tests/manual-tests-two.js"
 // import "./manual-tests/manual-tests-three.js"
 
-const appController = AppController();
-const screenController = ScreenController();
+(() => {
+    localStorage.clear();
+    const appController = AppController();
+    const screenController = ScreenController(appController);
+    
+    const projects = appController.getProjects();
+    const currentProject = appController.getCurrentProject();
 
-const projects = appController.getProjects();
-const currentProject = appController.getCurrentProject();
+    // Initial render
+    screenController.render(projects, currentProject);
+})();
 
-screenController.render(projects, currentProject);
+
+
+
+
 
