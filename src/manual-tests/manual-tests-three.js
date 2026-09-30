@@ -1,5 +1,5 @@
 import controller from "../controller.js"; 
-import { loadProjects, loadTodos } from "../storage.js";
+import { loadProjects } from "../storage.js";
 
 const check = (label, condition) =>
   console.log(`${condition ? "✅" : "❌"} ${label}`);
@@ -9,7 +9,7 @@ const KEY = "odin-todo-app";                 // ← must match storage.js
 console.log("===== CONTROLLER + STORAGE INTEGRATION =====");
 
 // Start clean so results are predictable
-localStorage.clear();
+localStorage.removeItem(KEY); 
 
 // ---- CONTROLLER ACTIONS SHOULD PERSIST AUTOMATICALLY ----
 
@@ -17,32 +17,32 @@ localStorage.clear();
 const work = controller.addProject("Work");
 check("addProject persisted", localStorage.getItem(KEY) !== null);
 check("saved data has the new project",
-  loadProjects().some((p) => p.name === "Work"));
+  loadProjects().some((p) => p.name === "Work")); 
 
-// 2. Creating a todo through the controller persists too
+// // 2. Creating a todo through the controller persists too
 controller.setCurrentProject(work.id);
-controller.addTodoToCurrent("Finish report", "Q3 numbers", "2026-09-30", "high"); // ← if your controller builds the todo itself, call it that way instead
+controller.addTodoToCurrent("Finish report", "Q3 numbers", "2026-09-30", "high");
 check("addTodo persisted",
- loadTodos(work.id).length === 1); 
+ loadProjects().find((p) => p.id === work.id).todos.length === 1);
 
-// 3. Toggling complete through the app persists the new state
+// // 3. Toggling complete through the app persists the new state
 const todo = controller.getCurrentProject().getTodos()[0];
-const current = controller.getCurrentProject();
-current.toggleTodo(todo.id);
+controller.toggleTodo(todo.id);
 check("completed state persisted",
-  loadTodos(work.id)[0].completed === true);
+  loadProjects().find((p) => p.id === work.id).todos[0].completed === true);
+
 
 // 4. Deleting a todo persists the removal
-controller.getCurrentProject().removeTodo(todo.id);
+controller.removeTodoFromCurrent(todo.id);
 check("todo removal persisted",
-  loadTodos(work.id).length === 0);
+  loadProjects().find((p) => p.id === work.id).todos.length === 0);
 
-// 5. Deleting a project persists
+// // 5. Deleting a project persists
 controller.deleteProject(work.id);
 check("project removal persisted",
   !loadProjects()?.some((p) => p.id === work.id) ); 
 
-// ---- RELOAD SIMULATION: does the controller rehydrate correctly? ----
+// // ---- RELOAD SIMULATION: does the controller rehydrate correctly? ----
 
 // 6. Seed some data, then ask the controller to reload from storage
 controller.addProject("Personal");
@@ -53,16 +53,17 @@ controller.init();   // ← your startup/rehydrate method (reads storage, rebuil
 
 const reloadedProject = controller.getProjects().find((p) => p.name === "Personal");
 check("project survived reload", reloadedProject !== undefined);
-check("todo survived reload", loadTodos(reloadedProject.id).length === 1);
+console.log(reloadedProject.getTodos());
+console.log(reloadedProject.todos);
+check("todo survived reload", reloadedProject.getTodos().length === 1);
 check("methods intact after reload",
   typeof reloadedProject.addTodo === "function",
   typeof reloadedProject.removeTodo === "function",
-  typeof reloadedProject.toggleTodo === "function",
   typeof reloadedProject.getTodo === "function",
   typeof reloadedProject.getTodos === "function",
 );
 
-// 7. Fresh start: no saved data → controller should create a default project, not crash
+// // 7. Fresh start: no saved data → controller should create a default project, not crash
 localStorage.clear();
 controller.init();
 check("default project on empty storage",
@@ -70,4 +71,4 @@ check("default project on empty storage",
 check("current project is set after fresh init",
   controller.getCurrentProject() !== undefined);
 
-console.log("===== DONE =====");
+// console.log("===== DONE =====");

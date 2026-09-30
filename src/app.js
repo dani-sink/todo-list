@@ -1,13 +1,13 @@
 import { AppController } from "./controller.js";
 import { ScreenController } from "./DOM.js";
 import "./styles.css";
+
 // Run tests
 // import "./manual-tests/manual-tests.js"; 
 // import "./manual-tests/manual-tests-two.js"
-// import "./manual-tests/manual-tests-three.js"
+// import "./manual-tests/manual-tests-three.js";
 
 (() => {
-    localStorage.clear();
     const appController = AppController();
     const screenController = ScreenController(appController);
     
@@ -15,7 +15,7 @@ import "./styles.css";
     const currentProject = appController.getCurrentProject();
 
     // Initial render
-    screenController.render(projects, currentProject);
+    screenController.render(projects, currentProject);   
 })();
 
 

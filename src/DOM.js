@@ -1,28 +1,53 @@
-import { format } from "date-fns";
-import { CHECKED_SVG_STRING, CHEVRON_DOWN_STRING, CHEVRON_UP_STRING, NOTEBOOK_SVG_STRING, TRASHCAN_STRING, UNCHECKED_SVG_STRING } from "./svg-strings.js";
+import { formatDate, isOverdue } from "./helpers/date.js";
+import { capitalizeFirstLetter } from "./helpers/string.js";
+import { 
+    renderCheckedSVG, 
+    renderChevronDownSVG, 
+    renderChevronUpSVG, 
+    renderNotesSVG, 
+    renderTrashcanSVG, 
+    renderUncheckedSVG 
+} from "./helpers/svg.js";
 
 export const ScreenController = function(appController) {
     const sidebarSection = document.querySelector("#sidebar-section");
     const todoSection = document.querySelector("#todo-section");
+
+    // Add new Project Modal
     const projectDialog = document.querySelector("#project-dialog");
-    const todoDialog = document.querySelector("#todo-dialog");
     const projectForm = document.querySelector("#project-form");
-    const todoForm = document.querySelector("#todo-form");
     const projectCancelBtn = document.querySelector("#project-cancel-btn");
-    const todoCancelBtn = document.querySelector("#todo-cancel-btn");
     const projectConfirmBtn = document.querySelector("#project-confirm-btn");
+    
+    // Add new Todo Modal
+    const todoDialog = document.querySelector("#todo-dialog");
+    const todoForm = document.querySelector("#todo-form");
+    const todoCancelBtn = document.querySelector("#todo-cancel-btn");
     const todoConfirmBtn = document.querySelector("#todo-confirm-btn");
+
+    // Cannot Delete Project Modal
+    const cannotDeleteDialog = document.querySelector("#cannot-delete-project-dialog");
+    const cannotDeleteOkBtn = document.querySelector("#cannot-delete-project-dialog-btn");
+
+    // Delete Project Modal
+    const deleteProjectDialog = document.querySelector("#delete-project-dialog");
+    const deleteProjectForm = document.querySelector("#delete-project-form");
+    const deleteProjectCancelBtn = document.querySelector("#delete-project-cancel-btn");
+    const deleteProjectConfirmBtn = document.querySelector("#delete-project-confirm-btn");
+
+    // Delete Todo Modal
     const deleteTodoDialog = document.querySelector("#delete-todo-dialog");
     const deleteTodoForm = document.querySelector("#delete-todo-form");
-    const deleteTodoCancelBtn = document.querySelector("#delete-cancel-btn");
-    const deleteTodoConfirmBtn = document.querySelector("#delete-confirm-btn");
+    const deleteTodoCancelBtn = document.querySelector("#delete-todo-cancel-btn");
+    const deleteTodoConfirmBtn = document.querySelector("#delete-todo-confirm-btn");
 
+    let targetDeleteProjectId = "";
     let targetDeleteTodoId = "";
 
 
     projectCancelBtn.addEventListener("click", function(e) {
         e.preventDefault();
-
+ 
         projectDialog.close();
         projectForm.reset();
     });
@@ -32,6 +57,19 @@ export const ScreenController = function(appController) {
 
         todoDialog.close();
         todoForm.reset();
+    });
+
+    cannotDeleteOkBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        cannotDeleteDialog.close();
+    });
+
+    deleteProjectCancelBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        
+        targetDeleteProjectId = "";
+        deleteProjectDialog.close();
+        deleteProjectForm.reset();
     });
 
     deleteTodoCancelBtn.addEventListener("click", function(e) {
@@ -52,7 +90,6 @@ export const ScreenController = function(appController) {
 
             projectDialog.close(); 
             projectForm.reset();
-            
         } else {
             projectForm.reportValidity();
         }
@@ -77,39 +114,29 @@ export const ScreenController = function(appController) {
         }
     });
 
+    deleteProjectConfirmBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        appController.deleteProject(targetDeleteProjectId);
+        updateRender();
+        targetDeleteProjectId = "";
+        deleteProjectDialog.close();
+        deleteProjectForm.reset(); 
+    }); 
+ 
+
     deleteTodoConfirmBtn.addEventListener("click", function(e) {
         e.preventDefault();
 
-        appController.getCurrentProject().removeTodo(targetDeleteTodoId);
+        appController.removeTodoFromCurrent(targetDeleteTodoId);
         updateRender();
         targetDeleteTodoId = "";
         deleteTodoDialog.close();
         deleteTodoForm.reset();
-    });
-    
-    const capitalizeFirstLetter = (str) => {
-        if (!str) return '';
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    const formatDate = (dateString) => {
-        const arr = dateString.split("-").map(num => Number(num))
-        const date = new Date(arr[0], arr[1] - 1, arr[2]);
-        const wordsFormat = format(date, "dd MMM");
-        return wordsFormat;
-    }
-
-    const isOverdue = (dateString) => {
-        const todayDateString = new Date().toISOString().split('T')[0];
-
-        const todayDate = new Date(todayDateString);
-        const targetDate = new Date(dateString);
-
-        return targetDate < todayDate;
-    }
+    }); 
 
     const clearSidebar = () => {
-        sidebarSection.replaceChildren();
+        sidebarSection.replaceChildren(); 
     }
 
     const clearTodoSection = () => {
@@ -142,18 +169,50 @@ export const ScreenController = function(appController) {
         projects.forEach(proj => {
             const projectItem = document.createElement("li");
             projectItem.classList.add("project-item");
+            projectItem.dataset.id = proj.id;
+            projectItem.addEventListener("click", function(e){
+                e.preventDefault();
+                const currentProjectId = appController.getCurrentProject().id;
+                const targetId = e.currentTarget.dataset.id;
+                if (currentProjectId !== targetId) {
+                    appController.setCurrentProject(targetId);
+                    updateRender();
+                }
+            });
 
             const projectName = document.createElement("p");
             projectName.classList.add("project-name");
             projectName.textContent = proj.name;
 
-            const todosCount = proj.getTodos().length;
+            const projectItemRightContainer = document.createElement("div");
+            projectItemRightContainer.classList.add("project-item-right-container");
+            
+            // const todosCount = proj.getTodos().length;
+            const todosCount = proj.todos.length;
             const numTodos = document.createElement("span");
             numTodos.classList.add("num-todos");
             numTodos.textContent = String(todosCount);
 
+            const projectItemTrashSVG = document.createElement("button");
+            projectItemTrashSVG.classList.add("project-item-trash-svg");
+            const trashSVG = renderTrashcanSVG("20px", "20px");
+            projectItemTrashSVG.appendChild(trashSVG);
+            projectItemTrashSVG.addEventListener("click", function(e) {
+                e.preventDefault();
+
+                const numProjects = appController.getProjects().length;
+                if (numProjects > 1) {
+                    targetDeleteProjectId = e.target.parentElement.parentElement.dataset.id;
+                    deleteProjectDialog.showModal();
+                } else {
+                    cannotDeleteDialog.showModal();
+                }
+            });
+
             projectItem.appendChild(projectName);
-            projectItem.appendChild(numTodos);
+            projectItemRightContainer.appendChild(numTodos);
+            projectItemRightContainer.appendChild(projectItemTrashSVG);
+            projectItem.appendChild(projectItemRightContainer);
             projectList.appendChild(projectItem);
         });
         
@@ -171,67 +230,6 @@ export const ScreenController = function(appController) {
         sidebarSection.appendChild(projectsContainer);
         sidebarSection.appendChild(sideBarButton);        
     } 
-
-    const renderSVG = function (svgString) {
-        // Initialize the DOMParser
-        const parser = new DOMParser();
-
-        // Parse the string into an XML Document object
-        const doc = parser.parseFromString(svgString, "image/svg+xml");
-
-        // Extract the SVG element node
-        const svgElement = doc.documentElement;
-
-        return svgElement;
-    }
-
-    const renderNotesSVG = function () {
-        const notesSVG = renderSVG(NOTEBOOK_SVG_STRING);
-        notesSVG.setAttribute("width", "40px");
-        notesSVG.setAttribute("height", "40px");
-        return notesSVG;
-    }
-
-    const renderUncheckedSVG = function () {
-        const uncheckedSVG = renderSVG(UNCHECKED_SVG_STRING);
-        uncheckedSVG.setAttribute("width", "40px");
-        uncheckedSVG.setAttribute("height", "40px");
-        uncheckedSVG.style.pointerEvents = "none";
-        return uncheckedSVG;
-    }
-
-    const renderCheckedSVG = function () {
-        const checkedSVG = renderSVG(CHECKED_SVG_STRING);
-        checkedSVG.setAttribute("width", "40px");
-        checkedSVG.setAttribute("height", "40px");
-        checkedSVG.setAttribute("fill", "#4BB543");
-        checkedSVG.style.pointerEvents = "none";
-        return checkedSVG;
-    }
-
-    const renderChevronDownSVG = function () {
-        const chevronDownSVG = renderSVG(CHEVRON_DOWN_STRING);
-        chevronDownSVG.setAttribute("width", "40px");
-        chevronDownSVG.setAttribute("height", "40px");
-        chevronDownSVG.style.pointerEvents = "none";
-        return chevronDownSVG;
-    }
-    
-    const renderChevronUpSVG = function () {
-        const chevronUpSVG = renderSVG(CHEVRON_UP_STRING);
-        chevronUpSVG.setAttribute("width", "40px");
-        chevronUpSVG.setAttribute("height", "40px");
-        chevronUpSVG.style.pointerEvents = "none";
-        return chevronUpSVG;
-    }
-    const renderTrashcanSVG = function () {
-        const trashcanSVG = renderSVG(TRASHCAN_STRING);
-        trashcanSVG.setAttribute("width", "40px");
-        trashcanSVG.setAttribute("height", "40px");
-        trashcanSVG.style.pointerEvents = "none";
-        return trashcanSVG;
-    }
-    
 
     const renderTodoSection = function (project) {
         clearTodoSection();
@@ -260,7 +258,8 @@ export const ScreenController = function(appController) {
 
         todoSection.appendChild(topContainer);
 
-        if (project.getTodos().length === 0) {
+        // if (project.getTodos().length === 0) {
+        if (project.todos.length === 0) {
             const notesSVG = renderNotesSVG();
             
             const blankProjectText = document.createElement("p");
@@ -270,10 +269,11 @@ export const ScreenController = function(appController) {
             todoSection.appendChild(notesSVG);
             todoSection.appendChild(blankProjectText);
         } else {
-            const todos = project.getTodos();
+            // const todos = project.getTodos();
+            const todos = project.todos;
             const todoList = document.createElement("ul");
             todoList.classList.add("todo-items-container");
-            todos.forEach((todo) => {
+            todos.forEach((todo) => { 
                 const todoItem = document.createElement("li");
                 todoItem.classList.add("todo-item");
                 todoItem.dataset.expanded = "false";
@@ -294,7 +294,7 @@ export const ScreenController = function(appController) {
 
                     const todo_item = e.target.parentElement.parentElement;
                     const todo_id = todo_item.dataset.todoId;
-                    appController.getCurrentProject().toggleTodo(todo_id);
+                    appController.toggleTodo(todo_id);
                     updateRender();
 
                     if (todo_item.dataset.completed === "false") {
@@ -364,7 +364,7 @@ export const ScreenController = function(appController) {
 
                 const todoItemDeleteBtn = document.createElement("button");
                 todoItemDeleteBtn.classList.add("todo-delete-btn");
-                const trashcanSVG = renderTrashcanSVG();
+                const trashcanSVG = renderTrashcanSVG("40px", "40px");
                 todoItemDeleteBtn.appendChild(trashcanSVG);
                 todoItemDeleteBtn.addEventListener("click", function(e) {
                     e.preventDefault();

@@ -1,44 +1,43 @@
-import { loadTodos, saveTodos } from "./storage.js";
 import { createTodo } from "./todo.js";
 
 export const createProject =  function(name) {
     const id = crypto.randomUUID();
     let todos = []; 
 
-    const addTodo = (
+    // const init = () => {
+    //     todos = loadTodos(id) !== null ? loadTodos(id) : [];
+    //     // saveTodos(id, todos);
+    // }
+
+    const addTodo = function (
         title,
         description,
         dueDate,
         priority,
-    ) => {
+    ) {
         const newTodo = createTodo(title, description, dueDate, priority);
-        todos.push(newTodo);
-        saveTodos(id, todos);
+        this.todos.push(newTodo);
         return newTodo.id;
     }
     
-    const removeTodo = (todoId) => {
-        todos = todos.filter(todo => todo.id !== todoId);
-        saveTodos(id, todos);
+    const removeTodo = function (todoId) {
+        this.todos = this.todos.filter(todo => todo.id !== todoId);
     }
 
-    const toggleTodo = (todoId) => {
-        todos.find(todo => todo.id === todoId).toggleComplete();
-        saveTodos(id, todos);
-    }
-
-    const getTodo = (todoId) => {
-        const targetTodo = todos.find(todo => todo.id === todoId);
+    const getTodo = function (todoId) {
+        const targetTodo = this.todos.find(todo => todo.id === todoId);
         return targetTodo;
     }
 
-    const getTodos = () => todos;
+    const getTodos = function () {
+        return this.todos;
+    }
 
     return {
         name,
         id,
+        todos,
         addTodo,
-        toggleTodo,
         removeTodo,
         getTodo,
         getTodos,

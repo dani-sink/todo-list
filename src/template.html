@@ -20,6 +20,13 @@
             </div>
         </form>
     </dialog>
+    <dialog id="cannot-delete-project-dialog">
+        <div id="cannot-delete-project-dialog-container">
+            <h3>Cannot delete project</h3>
+            <p id="deleteReasonText">There must be at least one existing project.</p>
+            <button id="cannot-delete-project-dialog-btn">Got it</button>
+        </div>
+    </dialog>
     <dialog id="todo-dialog">
         <form id="todo-form">
             <p>
@@ -64,14 +71,25 @@
             </div>
         </form>
     </dialog>
+    <dialog id="delete-project-dialog">
+        <form id="delete-project-form">
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete this project? This action cannot be undone.</p>
+
+            <div id="delete-project-dialog-btns">
+                <button id="delete-project-cancel-btn" value="Cancel">Cancel</button>
+                <button id="delete-project-confirm-btn" value="confirm">Delete</button>
+            </div>
+        </form>
+    </dialog>
     <dialog id="delete-todo-dialog">
         <form id="delete-todo-form">
             <h3>Confirm Deletion</h3>
             <p>Are you sure you want to delete this task? This action cannot be undone.</p>
 
-            <div id="delete-dialog-btns">
-                <button id="delete-cancel-btn" value="Cancel">Cancel</button>
-                <button id="delete-confirm-btn" value="confirm">Delete</button>
+            <div id="delete-todo-dialog-btns">
+                <button id="delete-todo-cancel-btn" value="Cancel">Cancel</button>
+                <button id="delete-todo-confirm-btn" value="confirm">Delete</button>
             </div>
         </form>
     </dialog>
