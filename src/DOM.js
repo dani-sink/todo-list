@@ -153,7 +153,6 @@ export const ScreenController = function(appController) {
         clearSidebar();
 
         const sidebarHeader = document.createElement("h1");
-        sidebarHeader.classList.add("sidebar-header");
         sidebarHeader.textContent = "Dashboard";
 
         const projectsContainer = document.createElement("div");
@@ -164,12 +163,18 @@ export const ScreenController = function(appController) {
         projectsHeaderTxt.textContent = "PROJECTS";
 
         const projectList = document.createElement("ul");
-        projectList.classList.add("projectList");
+        projectList.classList.add("project-list");
 
         projects.forEach(proj => {
             const projectItem = document.createElement("li");
             projectItem.classList.add("project-item");
             projectItem.dataset.id = proj.id;
+            if (proj.id === appController.getCurrentProject().id) {
+                projectItem.classList.add("selected");
+            } else {
+                projectItem.classList.remove(".selected");
+            }
+
             projectItem.addEventListener("click", function(e){
                 e.preventDefault();
                 const currentProjectId = appController.getCurrentProject().id;
@@ -190,7 +195,6 @@ export const ScreenController = function(appController) {
             // const todosCount = proj.getTodos().length;
             const todosCount = proj.todos.length;
             const numTodos = document.createElement("span");
-            numTodos.classList.add("num-todos");
             numTodos.textContent = String(todosCount);
 
             const projectItemTrashSVG = document.createElement("button");
