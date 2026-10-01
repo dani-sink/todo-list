@@ -4,8 +4,7 @@ A task manager built with vanilla JavaScript, organized into projects and persis
 
 **[Live demo →](https://dani-sink.github.io/todo-list/)**
 
-![Todo List screenshot](./live_preview.png)
--->
+![Todo List](./live_preview.png)
 
 ## Features
 
