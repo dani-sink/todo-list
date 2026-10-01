@@ -248,6 +248,16 @@ export const ScreenController = function(appController) {
         projectName.classList.add("todo-section-project-name");
         projectName.textContent = project.name;
 
+        const numTodosCompleted =  document.createElement("p")
+        numTodosCompleted.classList.add("num-todos-completed");
+        if (project.todos.length > 0) {
+            const completedTodosCount = project.getCompletedTodosCount();
+            const totalTodos = project.todos.length;
+            numTodosCompleted.textContent = `${completedTodosCount} of ${totalTodos} completed`;
+        } else {
+            numTodosCompleted.textContent = "";
+        }
+
         const addTodoButton = document.createElement("button");
         addTodoButton.classList.add("add-todo-btn");
         addTodoButton.textContent = "+ Add task";
@@ -256,24 +266,29 @@ export const ScreenController = function(appController) {
         });
 
         projectNameContainer.appendChild(projectName);
+        projectNameContainer.appendChild(numTodosCompleted);
 
         topContainer.appendChild(projectNameContainer);
         topContainer.appendChild(addTodoButton);
 
         todoSection.appendChild(topContainer);
 
-        // if (project.getTodos().length === 0) {
         if (project.todos.length === 0) {
+            const contentContainer = document.createElement("div");
+            contentContainer.classList.add("project-content-container-empty");
+
             const notesSVG = renderNotesSVG();
             
             const blankProjectText = document.createElement("p");
             blankProjectText.classList.add("blank-project-txt");
             blankProjectText.textContent = "No tasks yet — add your first one.";
 
-            todoSection.appendChild(notesSVG);
-            todoSection.appendChild(blankProjectText);
+            contentContainer.appendChild(notesSVG);
+            contentContainer.appendChild(blankProjectText);
+            todoSection.appendChild(contentContainer);
         } else {
-            // const todos = project.getTodos();
+            const contentContainer = document.createElement("div");
+            contentContainer.classList.add("project-content-container");
             const todos = project.todos;
             const todoList = document.createElement("ul");
             todoList.classList.add("todo-items-container");
@@ -284,6 +299,20 @@ export const ScreenController = function(appController) {
                 todoItem.dataset.todoId = todo.id;
                 todoItem.dataset.completed = String(todo.completed);
 
+                if (todo.priority === "high") {
+                    todoItem.classList.add("high");
+                    todoItem.classList.remove("medium");
+                    todoItem.classList.remove("low");
+                } else if (todo.priority === "medium") {
+                    todoItem.classList.remove("high");
+                    todoItem.classList.add("medium");
+                    todoItem.classList.remove("low");
+                } else {
+                    todoItem.classList.remove("high");
+                    todoItem.classList.remove("medium");
+                    todoItem.classList.add("low");
+                }
+                
                 // Left container
                 const todoItemLeftContainer = document.createElement("div");
                 todoItemLeftContainer.classList.add("todo-item-left-container");
@@ -345,7 +374,7 @@ export const ScreenController = function(appController) {
                     todoItemDate.classList.add("overdue");
                     todoItemDate.textContent = `Overdue · ${formatDate(todo.dueDate)}`
                 } else {
-                    todoItemDate.textContent = formatDate(todo.dueDate);
+                    todoItemDate.textContent = `Due ${formatDate(todo.dueDate)}`;
                 }
                 
                 const todoItemChevronBtn = document.createElement("button");
@@ -387,7 +416,8 @@ export const ScreenController = function(appController) {
                 todoList.appendChild(todoItem);
             });
 
-            todoSection.appendChild(todoList);
+            contentContainer.appendChild(todoList);
+            todoSection.appendChild(contentContainer);
         }
     }
 

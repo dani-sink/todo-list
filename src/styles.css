@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
+/* 
+
+Reset styles inspired by Josh Comeau's CSS Reset: https://www.joshwcomeau.com/css/custom-css-reset/
+
+*/
+
+
 /* 1. Use a more intuitive box-sizing model */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -46,14 +53,18 @@ body {
     font-family: "Inter", "system-ui", sans-serif;
     background-color: #f4f5f7;
     display: grid;
-    grid-template-columns: 1fr 5fr;
+    grid-template-columns: 1fr 4fr;
     min-height: 100vh;
 }
+
+
+/* Sidebar Section */
 
 #sidebar-section {
     background-color: #1f2430;
     padding: clamp(1rem, calc(0.75rem + 1vw), 1.5rem);
     color: #e6e8ed;
+    height: 100%;
 }
 
 #sidebar-section h1 {
@@ -176,6 +187,213 @@ body {
     background-color: #39415a;
 }
 
+
+/* Todo Section */
+ 
+
+#todo-section {
+    padding: clamp(1.25rem, calc(1.4rem + 2.4vw), 2.55rem) clamp(2.25rem, calc(2.5rem + 1.4vw), 4.5rem);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 2rem;
+}
+
+.todo-section-project-name {
+    font-size: clamp(1.375rem, calc(1.25rem + 2vw), 1.625rem);
+    font-weight: 700;
+    color: #1f2430;
+}
+
+.num-todos-completed {
+    font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
+    color: #6b7280;
+}
+
+.todo-top-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.add-todo-btn {
+    background-color: #4c6ef5;
+    color: #fff;
+    font-family: inherit;
+    font-size: 1.025rem;
+    font-weight: 500;
+    padding: 0.625rem 1.25rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.add-todo-btn:hover {
+    background-color: #1b4ab0;
+} 
+
+.add-todo-btn:active {
+    opacity: 0.8;
+} 
+
+.project-content-container-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    gap: 1rem;
+}
+
+.project-content-container-empty svg {
+    fill: #6b7280;
+}
+
+.project-content-container-empty p {
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.todo-items-container {
+    list-style: none;
+    display: grid;
+    gap: 1.25rem;
+    color: #1f2430;
+}
+
+.todo-items-container button {
+    border: none;
+    width: fit-content;
+    background-color: inherit;
+    cursor: pointer;
+}
+
+.todo-items-container > li {
+    background-color: #fff;
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.02),
+        0 10px 30px rgba(0, 0, 0, 0.06);
+    ;
+    display: grid;
+    grid-template-columns: 1fr 8fr 7fr;
+    column-gap: 0.875rem;
+    border-radius: 8px;
+    transition: 
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+    ;
+    padding: 1.25rem;
+}
+
+.todo-items-container > li.high {
+    border-left: 5px solid #e5484d;
+}
+
+.todo-items-container > li.high .todo-item-priority {
+    color: #e5484d;
+    background-color: #ffdbde;
+}
+
+.todo-items-container > li.medium {
+    border-left: 5px solid #f5a623;
+}
+
+.todo-items-container > li.medium .todo-item-priority {
+    color: #94661a;
+    background-color: #fce2ba;
+}   
+
+.todo-items-container > li.low {
+    border-left: 5px solid #30a46c;
+}
+
+.todo-items-container > li.low .todo-item-priority {
+    color: #30a46c;
+    background-color: #e2f4eb;
+}  
+
+
+.todo-item-left-container {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+}
+
+.todo-item-completed-btn {
+    fill: #6b7280;
+}
+
+.todo-item-completed-btn:hover {
+    fill: #4BB543;
+}
+
+
+.todo-item-left-container svg {
+    width: 28px;
+    height: 28px;
+}
+
+.todo-item-middle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.todo-item-title {
+    font-weight: 500;
+}
+
+.todo-item-description {
+    font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
+    color: #6b7280;
+}
+
+.todo-item-middle-container p {
+    width: 80%;
+}
+
+.todo-item-right-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: end;
+    gap: 0.975rem;
+}
+
+.todo-item-priority {
+    font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
+    font-weight: 600;
+    padding: 0 0.575rem;
+    border-radius: 10px;
+}
+
+.todo-item-date {
+    font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);;
+    color: #6b7280;
+}
+
+.todo-item-date.overdue {
+    color: #fd131b;
+    font-weight: 600;
+}
+
+.chevron-btn:hover {
+    fill: #2563eb;
+}
+
+.todo-delete-btn:hover {
+    fill: #e5484d;
+}
+
+.todo-item-right-container svg {
+    width: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
+    height: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
+}
+
+/* Modal styling and animation */
+
 dialog {
     margin: auto;
     padding: 2rem;
@@ -200,6 +418,19 @@ dialog {
 dialog[open] {
     opacity: 1;
     transform: translateY(0);
+    animation: modalFadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 @starting-style {
@@ -214,10 +445,10 @@ dialog::backdrop {
     backdrop-filter: blur(4px);
     opacity: 0;
     transition: 
-        opacity 0.3s ease,
-        transform 0.3s ease,
-        overlay 0.3s ease allow-discrete,
-        display 0.3s ease allow-discrete,
+        opacity 0.3s ease-in-out,
+        transform 0.3s ease-in-out,
+        overlay 0.3s ease-in-out allow-discrete,
+        display 0.3s ease-in-out allow-discrete,
         ;
 }
 
@@ -230,6 +461,7 @@ dialog[open]::backdrop {
         opacity: 1;
     }
 }
+
 
 /* Modal Content */
 

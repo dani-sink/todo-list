@@ -4,11 +4,6 @@ export const createProject =  function(name) {
     const id = crypto.randomUUID();
     let todos = []; 
 
-    // const init = () => {
-    //     todos = loadTodos(id) !== null ? loadTodos(id) : [];
-    //     // saveTodos(id, todos);
-    // }
-
     const addTodo = function (
         title,
         description,
@@ -22,6 +17,10 @@ export const createProject =  function(name) {
     
     const removeTodo = function (todoId) {
         this.todos = this.todos.filter(todo => todo.id !== todoId);
+    }
+
+    const getCompletedTodosCount = function() {
+        return this.todos.filter((todo) => todo.completed === true).length;
     }
 
     const getTodo = function (todoId) {
@@ -39,6 +38,7 @@ export const createProject =  function(name) {
         todos,
         addTodo,
         removeTodo,
+        getCompletedTodosCount,
         getTodo,
         getTodos,
     }
