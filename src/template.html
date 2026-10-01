@@ -12,7 +12,7 @@
         <form id="project-form">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" name="name" id="project-name" required>
+                <input type="text" name="name" id="project-name" maxlength="20" required>
             </div>
             <div id="project-dialog-btns">
                 <button id="project-cancel-btn" value="Cancel">Cancel</button>
@@ -31,7 +31,7 @@
         <form id="todo-form">
             <div class="form-group">
                 <label for="title">Title</label>
-                <input type="text" name="title" id="title" required>
+                <input type="text" maxlength="50" name="title" id="title" required>
             </div>
             <div class="textarea-group">
                 <label for="description">Description</label>
@@ -42,7 +42,7 @@
                     rows="12"
                     cols="30"
                     placeholder="Enter the description here..."
-                    required></textarea>
+                    ></textarea>
             </div>
             <div class="form-group">
                 <label for="dueDate">Due Date</label>
