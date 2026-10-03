@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 /* 
 
@@ -6,9 +6,10 @@ Reset styles inspired by Josh Comeau's CSS Reset: https://www.joshwcomeau.com/cs
 
 */
 
-
 /* 1. Use a more intuitive box-sizing model */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -26,23 +27,39 @@ body {
 }
 
 /* 4. Media defaults - prevent overflow and match containers */
-img, picture, video, canvas, svg {
+img,
+picture,
+video,
+canvas,
+svg {
   display: block;
   max-width: 100%;
 }
 
 /* 5. Inherit fonts for form controls */
-input, button, textarea, select {
+input,
+button,
+textarea,
+select {
   font: inherit;
 }
 
 /* 6. Avoid text overflows on long string content */
-p, h1, h2, h3, h4, h5, h6 {
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   overflow-wrap: break-word;
 }
 
 /* 7. Improve typographic line-wrapping balance */
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   text-wrap: balance;
 }
 p {
@@ -50,590 +67,579 @@ p {
 }
 
 body {
-    font-family: "Inter", "system-ui", sans-serif;
-    background-color: #f4f5f7;
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    min-height: 100vh;
+  font-family: "Inter", "system-ui", sans-serif;
+  background-color: #f4f5f7;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  min-height: 100vh;
 }
-
 
 /* Sidebar Section */
 
 #sidebar-section {
-    background-color: #1f2430;
-    padding: clamp(1rem, calc(0.75rem + 1vw), 1.5rem);
-    color: #e6e8ed;
-    height: 100%;
+  background-color: #1f2430;
+  padding: clamp(1rem, calc(0.75rem + 1vw), 1.5rem);
+  color: #e6e8ed;
+  height: 100%;
 }
 
 #sidebar-section h1 {
-    font-size: clamp(1.375rem, calc(1.25rem + 0.5vw), 1.625rem);
+  font-size: clamp(1.375rem, calc(1.25rem + 0.5vw), 1.625rem);
 }
 
 .projects-container {
-    margin-top: 2.5rem;
+  margin-top: 2.5rem;
 }
 
 .projects-header-txt {
-    font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
-    opacity: 0.7;
+  font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
+  opacity: 0.7;
 }
 
 .project-list {
-    margin-top: 0.5rem;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  margin-top: 0.5rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .project-list > li {
-    border-radius: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-    justify-content: space-between;
-    padding: 0.5rem 10px;
-    font-weight: 600;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 0.5rem 10px;
+  font-weight: 600;
 }
 
 @media screen and (max-width: 1000px) {
-    .project-list > li {
-        justify-content: center;
-    }
+  .project-list > li {
+    justify-content: center;
+  }
 }
 
 .project-list > .project-item.selected {
-    background-color:#39415a;
+  background-color: #39415a;
 }
 
 .project-list > .project-item.selected span {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .project-list > .project-item.selected > .project-name {
-    font-weight: 600;
+  font-weight: 600;
 }
 
-
 .project-list > li:hover {
-    cursor: pointer;
-    background-color: #2b3242;
+  cursor: pointer;
+  background-color: #2b3242;
 }
 
 .project-item-right-container {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .project-name {
-    font-weight: 400;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 125px;   
+  font-weight: 400;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 125px;
 }
 
 .project-item-right-container button {
-    background-color: #292f3d;
-    padding: 6px 5px;
-    border: none;
-    border-radius: 10px;
+  background-color: #292f3d;
+  padding: 6px 5px;
+  border: none;
+  border-radius: 10px;
 }
 
-
 .project-item-right-container > button:hover {
-    cursor: pointer;
-    background-color: #e5484d;
+  cursor: pointer;
+  background-color: #e5484d;
 }
 
 .project-item-right-container span:hover {
-    cursor: default;
+  cursor: default;
 }
 
 .project-item-right-container span {
-    background-color: #292f3d;
-    font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
-    padding: 4px 10px;
-    border-radius: 10px;
-    font-weight: 400;
-    color: #a1abbe;
+  background-color: #292f3d;
+  font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-weight: 400;
+  color: #a1abbe;
 }
 
 .project-item-right-container svg {
-    fill: #fff;
-    width: 1.1rem;
-    height: 1.1rem;
+  fill: #fff;
+  width: 1.1rem;
+  height: 1.1rem;
 }
 
 .show-proj-dialog {
-    margin-top: 1.5rem;
-    padding: 0.5rem 10px;
-    border-radius: 8px;
-    background-color: inherit;
-    color: #fff;
-    opacity: 0.7;
-    border: 1px dashed #fff;
-    width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.5rem 10px;
+  border-radius: 8px;
+  background-color: inherit;
+  color: #fff;
+  opacity: 0.7;
+  border: 1px dashed #fff;
+  width: 100%;
 }
 
 .show-proj-dialog:hover {
-    cursor: pointer;
-    background-color: #2b3242;
+  cursor: pointer;
+  background-color: #2b3242;
 }
 
 .show-proj-dialog:active,
-.project-list > li:active
- {
-    background-color: #39415a;
+.project-list > li:active {
+  background-color: #39415a;
 }
 
-
 /* Todo Section */
- 
 
 #todo-section {
-    padding: clamp(1.25rem, calc(1.4rem + 2.4vw), 2.55rem) clamp(2.25rem, calc(2.5rem + 1.4vw), 4.5rem);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    gap: 2rem;
+  padding: clamp(1.25rem, calc(1.4rem + 2.4vw), 2.55rem)
+    clamp(2.25rem, calc(2.5rem + 1.4vw), 4.5rem);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 2rem;
 }
 
 .todo-section-project-name {
-    font-size: clamp(1.375rem, calc(1.25rem + 2vw), 1.625rem);
-    font-weight: 700;
-    color: #1f2430;
+  font-size: clamp(1.375rem, calc(1.25rem + 2vw), 1.625rem);
+  font-weight: 700;
+  color: #1f2430;
 }
 
 .num-todos-completed {
-    font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
-    color: #6b7280;
+  font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
+  color: #6b7280;
 }
 
 .todo-top-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
 }
 
 .add-todo-btn {
-    background-color: #4c6ef5;
-    color: #fff;
-    font-family: inherit;
-    font-size: 1.025rem;
-    font-weight: 500;
-    padding: 0.625rem 1.25rem;
-    border-radius: 6px;
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: all 0.15s ease;
+  background-color: #4c6ef5;
+  color: #fff;
+  font-family: inherit;
+  font-size: 1.025rem;
+  font-weight: 500;
+  padding: 0.625rem 1.25rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .add-todo-btn:hover {
-    background-color: #1b4ab0;
-} 
+  background-color: #1b4ab0;
+}
 
 .add-todo-btn:active {
-    opacity: 0.8;
-} 
+  opacity: 0.8;
+}
 
 .project-content-container-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-grow: 1;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  gap: 1rem;
 }
 
 .project-content-container-empty svg {
-    fill: #6b7280;
+  fill: #6b7280;
 }
 
 .project-content-container-empty p {
-    color: #6b7280;
-    font-weight: 500;
+  color: #6b7280;
+  font-weight: 500;
 }
 
 .todo-items-container {
-    list-style: none;
-    display: grid;
-    gap: 1.25rem;
-    color: #1f2430;
+  list-style: none;
+  display: grid;
+  gap: 1.25rem;
+  color: #1f2430;
 }
 
 .todo-items-container button {
-    border: none;
-    width: fit-content;
-    background-color: inherit;
-    cursor: pointer;
+  border: none;
+  width: fit-content;
+  background-color: inherit;
+  cursor: pointer;
 }
 
 .todo-items-container > li {
-    background-color: #fff;
-    box-shadow: 
-        0 2px 4px rgba(0, 0, 0, 0.02),
-        0 10px 30px rgba(0, 0, 0, 0.06);
-    ;
-    display: grid;
-    grid-template-columns: 1fr 8fr 7fr;
-    column-gap: 0.875rem;
-    border-radius: 8px;
-    transition: 
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-    ;
-    padding: 1.25rem;
+  background-color: #fff;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.02),
+    0 10px 30px rgba(0, 0, 0, 0.06);
+  display: grid;
+  grid-template-columns: 1fr 8fr 7fr;
+  column-gap: 0.875rem;
+  border-radius: 8px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  padding: 1.25rem;
 }
 
 .todo-items-container > li.high {
-    border-left: 5px solid #e5484d;
+  border-left: 5px solid #e5484d;
 }
 
 .todo-items-container > li.high .todo-item-priority {
-    color: #e5484d;
-    background-color: #ffdbde;
+  color: #e5484d;
+  background-color: #ffdbde;
 }
 
 .todo-items-container > li.medium {
-    border-left: 5px solid #f5a623;
+  border-left: 5px solid #f5a623;
 }
 
 .todo-items-container > li.medium .todo-item-priority {
-    color: #94661a;
-    background-color: #fce2ba;
-}   
+  color: #94661a;
+  background-color: #fce2ba;
+}
 
 .todo-items-container > li.low {
-    border-left: 5px solid #30a46c;
+  border-left: 5px solid #30a46c;
 }
 
 .todo-items-container > li.low .todo-item-priority {
-    color: #30a46c;
-    background-color: #e2f4eb;
-}  
-
+  color: #30a46c;
+  background-color: #e2f4eb;
+}
 
 .todo-item-left-container {
-    display: flex;
-    align-items: start;
-    justify-content: center;
+  display: flex;
+  align-items: start;
+  justify-content: center;
 }
 
 .todo-item-completed-btn {
-    fill: #6b7280;
+  fill: #6b7280;
 }
 
 .todo-item-completed-btn:hover {
-    fill: #4BB543;
+  fill: #4bb543;
 }
 
-
 .todo-item-left-container svg {
-    width: 28px;
-    height: 28px;
+  width: 28px;
+  height: 28px;
 }
 
 .todo-item-middle-container {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    justify-content: center;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .todo-item-title {
-    font-weight: 500;
+  font-weight: 500;
 }
 
 .todo-item-description {
-    font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
-    color: #6b7280;
+  font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
+  color: #6b7280;
 }
 
 .todo-item-middle-container p {
-    width: 80%;
+  width: 80%;
 }
 
 .todo-item-right-container {
-    display: flex;
-    align-items: flex-start;
-    justify-content: end;
-    gap: 0.975rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: end;
+  gap: 0.975rem;
 }
 
 .todo-item-priority {
-    font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
-    font-weight: 600;
-    padding: 0 0.575rem;
-    border-radius: 10px;
+  font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
+  font-weight: 600;
+  padding: 0 0.575rem;
+  border-radius: 10px;
 }
 
 .todo-item-date {
-    font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);;
-    color: #6b7280;
+  font-size: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
+  color: #6b7280;
 }
 
 .todo-item-date.overdue {
-    color: #fd131b;
-    font-weight: 600;
+  color: #fd131b;
+  font-weight: 600;
 }
 
 .chevron-btn:hover {
-    fill: #2563eb;
+  fill: #2563eb;
 }
 
 .todo-delete-btn:hover {
-    fill: #e5484d;
+  fill: #e5484d;
 }
 
 .todo-item-right-container svg {
-    width: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
-    height: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
+  width: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
+  height: clamp(0.813rem, calc(0.781rem + 0.125vw), 0.875rem);
 }
 
 /* Modal styling and animation */
 
 dialog {
-    margin: auto;
-    padding: 2rem;
-    width: 100%;
-    max-width: 480px;
-    border: none;
-    border-radius: 12px;
-    background-color: #f4f5f7;
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-    opacity: 0;
-    transform: translateY(10px);
-    transition: 
-        opacity 0.3s ease,
-        transform 0.3s ease,
-        overlay 0.3s ease allow-discrete,
-        display 0.3s ease allow-discrete,
-        ;
+  margin: auto;
+  padding: 2rem;
+  width: 100%;
+  max-width: 480px;
+  border: none;
+  border-radius: 12px;
+  background-color: #f4f5f7;
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    overlay 0.3s ease allow-discrete,
+    display 0.3s ease allow-discrete;
 }
 
 /* Open state animation */
 
 dialog[open] {
-    opacity: 1;
-    transform: translateY(0);
-    animation: modalFadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 1;
+  transform: translateY(0);
+  animation: modalFadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 @keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95) translateY(10px);
-    }
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
 
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 @starting-style {
-    dialog[open] {
-        opacity: 0;
-        transform: translateY(10px);
-    }
+  dialog[open] {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }
 
 dialog::backdrop {
-    background-color: rgb(0 0 0 / 0.5);
-    backdrop-filter: blur(4px);
-    opacity: 0;
-    transition: 
-        opacity 0.3s ease-in-out,
-        transform 0.3s ease-in-out,
-        overlay 0.3s ease-in-out allow-discrete,
-        display 0.3s ease-in-out allow-discrete,
-        ;
+  background-color: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition:
+    opacity 0.3s ease-in-out,
+    transform 0.3s ease-in-out,
+    overlay 0.3s ease-in-out allow-discrete,
+    display 0.3s ease-in-out allow-discrete;
 }
 
 dialog[open]::backdrop {
-    opacity: 1;
+  opacity: 1;
 }
 
 @starting-style {
-    dialog[open]::backdrop {
-        opacity: 1;
-    }
+  dialog[open]::backdrop {
+    opacity: 1;
+  }
 }
-
 
 /* Modal Content */
 
-form, .form-group {
-    display: flex;
-    flex-direction: column;
-    
+form,
+.form-group {
+  display: flex;
+  flex-direction: column;
 }
 
 form {
-    gap: 1.25rem;
+  gap: 1.25rem;
 }
 
 label {
-    font-size: 0.975rem;
-    font-weight: 500;
-    color: #1f2430;
+  font-size: 0.975rem;
+  font-weight: 500;
+  color: #1f2430;
 }
 
 input[type="text"],
 input[type="date"],
 textarea {
-    width: 100%;
-    padding: 0.625rem 0.875rem;
-    font-size: 0.95rem;
-    background-color: #f8fafc;
-    border: 1px solid #1f2430;
-    border-radius: 6px;
-    color: #1f2430;
-    transition: all 0.2s ease;
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.95rem;
+  background-color: #f8fafc;
+  border: 1px solid #1f2430;
+  border-radius: 6px;
+  color: #1f2430;
+  transition: all 0.2s ease;
 }
 
 textarea {
-    resize: vertical;
+  resize: vertical;
 }
 
 input[type="text"]:focus,
 input[type="date"]:focus,
 textarea:focus {
-    outline: none;
-    border-color: #2563eb;
-    background-color: #fff;
-    box-shadow: 0 0 0 4px rgb(37 88 235 / 0.15);
+  outline: none;
+  border-color: #2563eb;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgb(37 88 235 / 0.15);
 }
 
 .radio-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.875rem;
-    margin-top: 0.75rem;
-    padding: 0.825rem 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  margin-top: 0.75rem;
+  padding: 0.825rem 0.875rem;
 }
 
 .radio-group {
-    display: flex;
-    align-items: center;
-    gap: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
 }
 
 .radio-label {
-    font-size: 1.025rem;
+  font-size: 1.025rem;
 }
 
 input[type="radio"] {
-    appearance: none;
-    margin: 0;
-    width: 1.125rem;
-    height: 1.125rem;
-    border: 2px solid #cbd5e1;
-    border-radius: 50%;
-    transition: all 0.2s ease;
+  appearance: none;
+  margin: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  border: 2px solid #cbd5e1;
+  border-radius: 50%;
+  transition: all 0.2s ease;
 }
 
 input[type="radio"]:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 input[type="radio"]::before {
-    content: "";
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    transform: scale(0);
-    transition: 120ms transform ease-in-out;
-    background-color: #fff;
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  background-color: #fff;
 }
 
 input[type="radio"]:checked {
-    border-color: #2563eb;
-    background-color: #2563eb;
+  border-color: #2563eb;
+  background-color: #2563eb;
 }
 
 input[type="radio"]:checked::before {
-    transform: scale(1);
+  transform: scale(1);
 }
 
 input[type="radio"]:focus-visible {
-    outline: 2px solid #2563eb;
-    outline-offset: 2px;
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }
 
 dialog button {
-    font-family: inherit;
-    font-size: 1.025rem;
-    font-weight: 500;
-    padding: 0.625rem 1.25rem;
-    border-radius: 6px;
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: all 0.15s ease;
+  font-family: inherit;
+  font-size: 1.025rem;
+  font-weight: 500;
+  padding: 0.625rem 1.25rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 button[value="Cancel"] {
-    background-color: #e5484d;
-    color: #fff;
+  background-color: #e5484d;
+  color: #fff;
 }
 
 button[value="Cancel"]:hover {
-    background-color: #b4383c;
-} 
+  background-color: #b4383c;
+}
 
 button[value="Cancel"]:active {
-    opacity: 0.8;
-} 
+  opacity: 0.8;
+}
 
 button[value="Confirm"] {
-    background-color: #2563eb;
-    color: #fff;
+  background-color: #2563eb;
+  color: #fff;
 }
 
 button[value="Confirm"]:hover {
-    background-color: #1b4ab0;
-} 
+  background-color: #1b4ab0;
+}
 
 button[value="Confirm"]:active {
-    opacity: 0.8;
-} 
-
+  opacity: 0.8;
+}
 
 button[value="Delete"] {
-    background-color: #444444;
-    color: #fff;
-} 
+  background-color: #444444;
+  color: #fff;
+}
 
 button[value="Delete"]:hover {
-    background-color: #222222;
-} 
+  background-color: #222222;
+}
 
 button[value="Delete"]:active {
-    opacity: 0.8;
-} 
+  opacity: 0.8;
+}
 
 button[value="Got it"] {
-    background-color: #2563eb;
-    color: #fff;
-} 
+  background-color: #2563eb;
+  color: #fff;
+}
 
 button[value="Got it"]:hover {
-    background-color: #1b4ab0;
-} 
+  background-color: #1b4ab0;
+}
 
 button[value="Got it"]:active {
-    opacity: 0.8;
-} 
+  opacity: 0.8;
+}
 
 #cannot-delete-project-dialog-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.875rem;
 }
